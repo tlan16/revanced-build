@@ -1,6 +1,7 @@
 # EXCLUDE PATCHES FROM BELOW. DO NOT REMOVE THIS LINE
 always-autorepeat
 swipe-controls
+microg-support
 
 # INCLUDE PATCHES FROM BELOW. DO NOT REMOVE THIS LINE
 
