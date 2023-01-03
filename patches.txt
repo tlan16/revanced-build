@@ -4,3 +4,10 @@ swipe-controls
 hide-my-mix
 
 # INCLUDE PATCHES FROM BELOW. DO NOT REMOVE THIS LINE
+downloads
+disable-startup-shorts-player
+hide-create-button
+hide-crowdfunding-box
+hide-watch-in-vr
+hide-watermark
+remember-video-quality
