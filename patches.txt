@@ -11,3 +11,4 @@ hide-crowdfunding-box
 hide-watch-in-vr
 hide-watermark
 remember-video-quality
+disable-auto-captions
