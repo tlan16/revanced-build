@@ -1,0 +1,3 @@
+[submodule "revanced-build-template"]
+	path = revanced-build-template
+	url = https://github.com/n0k0m3/revanced-build-template.git

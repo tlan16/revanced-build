@@ -3,7 +3,7 @@
 # File containing all patches
 patch_file=./patches.txt
 
-# Get line numbers where included & excluded patches start from. 
+# Get line numbers where included & excluded patches start from.
 # We rely on the hardcoded messages to get the line numbers using grep
 excluded_start="$(grep -n -m1 'EXCLUDE PATCHES' "$patch_file" | cut -d':' -f1)"
 included_start="$(grep -n -m1 'INCLUDE PATCHES' "$patch_file" | cut -d':' -f1)"
@@ -22,7 +22,7 @@ declare -a patches
 declare -A artifacts
 
 artifacts["revanced-cli.jar"]="revanced/revanced-cli revanced-cli .jar"
-artifacts["revanced-integrations.apk"]="revanced/revanced-integrations app-release-unsigned .apk"
+artifacts["revanced-integrations.apk"]="revanced/revanced-integrations revanced-integrations .apk"
 artifacts["revanced-patches.jar"]="revanced/revanced-patches revanced-patches .jar"
 artifacts["apkeep"]="EFForg/apkeep apkeep-x86_64-unknown-linux-gnu"
 
