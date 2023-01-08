@@ -12,3 +12,9 @@ hide-watch-in-vr
 hide-watermark
 remember-video-quality
 disable-auto-captions
+codecs-unlock
+exclusive-audio-playback
+compact-header
+hide-get-premium
+tasteBuilder-remover
+upgrade-button-remover
