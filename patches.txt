@@ -19,3 +19,10 @@ compact-header
 hide-get-premium
 tasteBuilder-remover
 upgrade-button-remover
+change-homepage
+disable-auto-captions
+disable-haptic-feedback
+bitrate-default-value
+hide-taste-builder
+hide-upgrade-button
+settings
