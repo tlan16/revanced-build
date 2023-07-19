@@ -39,3 +39,5 @@ jobs:
           files: |
             build/*.apk
             vanced-microG.apk
+      - name: Keepalive Workflow
+        uses: gautamkrishnar/keepalive-workflow@1.1.0
