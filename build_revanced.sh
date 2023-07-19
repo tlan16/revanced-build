@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Import build configuration
+source build.targets
+
 # File containing all patches
 patch_file=./patches.txt
 
@@ -21,9 +24,17 @@ declare -a patches
 # Artifacts associative array aka dictionary
 declare -A artifacts
 
-artifacts["revanced-cli.jar"]="revanced/revanced-cli revanced-cli .jar"
+
+if [ "$EXTENDED_SUPPORT" = "true" ]; then
+artifacts["revanced-cli.jar"]="inotia00/revanced-cli revanced-cli .jar"
+artifacts["revanced-integrations.jar"]="inotia00/revanced-integrations revanced-integrations .jar"
+artifacts["revanced-patches.jar"]="inotia00/revanced-patches revanced-patches .jar"
+else
 artifacts["revanced-integrations.apk"]="revanced/revanced-integrations revanced-integrations .apk"
+artifacts["revanced-cli.jar"]="revanced/revanced-cli revanced-cli .jar"
 artifacts["revanced-patches.jar"]="revanced/revanced-patches revanced-patches .jar"
+fi
+artifacts["vanced-microG.apk"]="inotia00/VancedMicroG microg .apk"
 artifacts["apkeep"]="EFForg/apkeep apkeep-x86_64-unknown-linux-gnu"
 
 ## Functions
@@ -82,41 +93,136 @@ fi
 [[ ! -z "$excluded_patches" ]] && populate_patches "-e" "$excluded_patches"
 [[ ! -z "$included_patches" ]] && populate_patches "-i" "$included_patches"
 
-echo "************************************"
-echo "Building YouTube APK"
-echo "************************************"
-
 mkdir -p build
 
+function build_youtube_root(){
+echo "************************************"
+echo "Building YouTube Root APK"
+echo "************************************"
+
 if [ -f "com.google.android.youtube.apk" ]; then
-    echo "Building Root APK"
     java -jar revanced-cli.jar -m revanced-integrations.apk -b revanced-patches.jar --mount \
         -e microg-support ${patches[@]} \
         $EXPERIMENTAL \
-        -a com.google.android.youtube.apk -o build/revanced-root.apk
-    echo "Building Non-root APK"
-    java -jar revanced-cli.jar -m revanced-integrations.apk -b revanced-patches.jar \
-        ${patches[@]} \
-        $EXPERIMENTAL \
-        -a com.google.android.youtube.apk -o build/revanced-nonroot.apk
+        -a com.google.android.youtube.apk -o "build/revanced-youtube-$(cat versions.json | grep -oP '(?<="com.google.android.youtube.apk": ")[^"]*')-root.apk"
 else
     echo "Cannot find YouTube APK, skipping build"
 fi
-echo ""
+}
+
+function build_youtube_nonroot(){
+echo "************************************"
+echo "Building YouTube Non-root APK"
+echo "************************************"
+
+if [ -f "com.google.android.youtube.apk" ]; then
+    java -jar revanced-cli.jar -m revanced-integrations.apk -b revanced-patches.jar \
+        ${patches[@]} \
+        $EXPERIMENTAL \
+        -a com.google.android.youtube.apk -o "build/revanced-youtube-$(cat versions.json | grep -oP '(?<="com.google.android.youtube.apk": ")[^"]*').apk"
+else
+    echo "Cannot find YouTube APK, skipping build"
+fi
+}
+
+function build_ytmusic_root(){
 echo "************************************"
 echo "Building YouTube Music APK"
 echo "************************************"
+
 if [ -f "com.google.android.apps.youtube.music.apk" ]; then
     echo "Building Root APK"
     java -jar revanced-cli.jar -b revanced-patches.jar --mount \
         -e microg-support ${patches[@]} \
         $EXPERIMENTAL \
-        -a com.google.android.apps.youtube.music.apk -o build/revanced-music-root.apk
+        -a com.google.android.apps.youtube.music.apk -o "build/revanced-music-$(cat versions.json | grep -oP '(?<="com.google.android.apps.youtube.music.apk": ")[^"]*')-root.apk"
+else
+    echo "Cannot find YouTube Music APK, skipping build"
+fi
+}
+
+function build_ytmusic_nonroot(){
+echo "************************************"
+echo "Building YouTube Music APK"
+echo "************************************"
+
+if [ -f "com.google.android.apps.youtube.music.apk" ]; then
     echo "Building Non-root APK"
     java -jar revanced-cli.jar -b revanced-patches.jar \
         ${patches[@]} \
         $EXPERIMENTAL \
-        -a com.google.android.apps.youtube.music.apk -o build/revanced-music-nonroot.apk
+        -a com.google.android.apps.youtube.music.apk -o "build/revanced-music-$(cat versions.json | grep -oP '(?<="com.google.android.apps.youtube.music.apk": ")[^"]*').apk"
 else
     echo "Cannot find YouTube Music APK, skipping build"
 fi
+}
+
+
+function build_tiktok_nonroot(){
+echo "************************************"
+echo "Building TikTok APK"
+echo "************************************"
+
+if [ -f "com.zhiliaoapp.musically.apk" ]; then
+    echo "Building Non-root APK"
+    java -Xmx8192m -jar revanced-cli.jar -m revanced-integrations.apk -b revanced-patches.jar \
+        ${patches[@]} \
+        $EXPERIMENTAL \
+        -a com.zhiliaoapp.musically.apk -o "build/revanced-tiktok-$(cat versions.json | grep -oP '(?<="com.zhiliaoapp.musically.apk": ")[^"]*').apk"
+else
+    echo "Cannot find TikTok APK, skipping build"
+fi
+}
+
+function build_twitch_nonroot(){
+echo "************************************"
+echo "Building Twitch APK"
+echo "************************************"
+
+if [ -f "tv.twitch.android.app.apk" ]; then
+    echo "Building Non-root APK"
+    java -jar revanced-cli.jar -m revanced-integrations.apk -b revanced-patches.jar \
+        ${patches[@]} \
+        $EXPERIMENTAL \
+        -a tv.twitch.android.app.apk -o "build/revanced-twitch-$(cat versions.json | grep -oP '(?<="tv.twitch.android.app.apk": ")[^"]*').apk"
+else
+    echo "Cannot find Twitch APK, skipping build"
+fi
+}
+
+if [ "$YOUTUBE_ROOT" = "true" ]; then
+	build_youtube_root
+else
+	printf "\nSkipping YouTube ReVanced (root)"
+fi
+
+if [ "$YOUTUBE_NONROOT" = "true" ]; then
+	build_youtube_nonroot
+else
+	printf "\nSkipping YouTube ReVanced (nonroot)"
+fi
+
+if [ "$YTMUSIC_ROOT" = "true" ]; then
+	build_ytmusic_root
+else
+	printf "\nSkipping YouTube Music ReVanced (root)"
+fi
+
+if [ "$YTMUSIC_NONROOT" = "true" ]; then
+	build_ytmusic_nonroot
+else
+	printf "\nSkipping YouTube Music ReVanced (nonroot)"
+fi
+
+if [ "$TIKTOK_NONROOT" = "true" ] && [ "$EXTENDED_SUPPORT" != "true" ]; then
+	build_tiktok_nonroot
+else
+	printf "\nSkipping TikTok (nonroot) due to disabled config or ReVanced Extended support being enabled in build.targets"
+fi
+
+if [ "$TWITCH_NONROOT" = "true" ] && [ "$EXTENDED_SUPPORT" != "true" ]; then
+	build_twitch_nonroot
+else
+	printf "\nSkipping Twitch (nonroot) due to disabled config or ReVanced Extended support being enabled in build.targets"
+fi
+
