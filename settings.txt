@@ -3,7 +3,6 @@
 "hide_album_cards": true,
 "hide_artist_cards": true,
 "hide_audio_track_button": true,
-"hide_channel_bar": true,
 "hide_clip_button": true,
 "hide_community_posts": true,
 "hide_crowdfunding_box": true,
