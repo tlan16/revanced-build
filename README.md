@@ -1,10 +1,4 @@
-# This project is experiencing build issues. 
-
-Please use https://github.com/j-hc/revanced-magisk-module until problem fixed. 
-
----
-
-# To use [Revanced YouTube](https://github.com/revanced)
+#o use [Revanced YouTube](https://github.com/revanced)
 
 1. Uninstall existing YouTube and/or YouTube Revanced app.
 2. Open https://github.com/tlan16/revanced-build/releases/tag/latest
